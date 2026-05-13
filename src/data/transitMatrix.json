@@ -1,0 +1,23 @@
+{
+	"zones": ["Bandung Pusat", "Ciwidey", "Lembang", "Cihampelas"],
+	"matrix": {
+		"Bandung Pusat->Ciwidey": 45,
+		"Ciwidey->Bandung Pusat": 45,
+		"Bandung Pusat->Lembang": 40,
+		"Lembang->Bandung Pusat": 40,
+		"Bandung Pusat->Cihampelas": 15,
+		"Cihampelas->Bandung Pusat": 15,
+		"Ciwidey->Lembang": 90,
+		"Lembang->Ciwidey": 90,
+		"Ciwidey->Cihampelas": 80,
+		"Cihampelas->Ciwidey": 80,
+		"Lembang->Cihampelas": 35,
+		"Cihampelas->Lembang": 35,
+		"Bandung Pusat->Bandung Pusat": 0,
+		"Ciwidey->Ciwidey": 15,
+		"Lembang->Lembang": 10,
+		"Cihampelas->Cihampelas": 5
+	},
+	"defaultStartTime": "08:00",
+	"bufferMinutesBetweenStops": 15
+}

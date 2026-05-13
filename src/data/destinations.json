@@ -1,0 +1,53 @@
+[
+	{
+		"id": "dest_001",
+		"name": "Kawah Putih",
+		"category": "tempat-wisata",
+		"zone": "Ciwidey",
+		"description": "Crater lake with white sulfur water and scenic views",
+		"shortDescription": "Danau Kawah Putih yang eksotis",
+		"image": "https://images.unsplash.com/photo-1544986581-efac024faf62?auto=format&fit=crop&w=900&q=80",
+		"imageAlt": "White crater lake with steam rising",
+		"rating": 4.8,
+		"reviewCount": 1250,
+		"entryFee": 50000,
+		"entryFeeLabel": "Rp 50.000",
+		"estimatedDurationMinutes": 90,
+		"coordinates": { "lat": -7.1234, "lng": 107.5678 },
+		"operatingHours": "08:00 - 17:00"
+	},
+	{
+		"id": "dest_002",
+		"name": "Warung Ibu Imas",
+		"category": "tempat-makan",
+		"zone": "Bandung Pusat",
+		"description": "Traditional Sundanese rice and local dishes in a popular casual spot",
+		"shortDescription": "Kuliner Sunda legendaris",
+		"image": "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=900&q=80",
+		"imageAlt": "Traditional Sundanese meal",
+		"rating": 4.6,
+		"reviewCount": 880,
+		"entryFee": 0,
+		"entryFeeLabel": "Gratis",
+		"estimatedDurationMinutes": 60,
+		"coordinates": { "lat": -6.915, "lng": 107.609 },
+		"operatingHours": "10:00 - 21:00"
+	},
+	{
+		"id": "dest_003",
+		"name": "Cihampelas Walk",
+		"category": "toko-oleh-oleh",
+		"zone": "Cihampelas",
+		"description": "Shopping mall for local goods, souvenirs, and casual shopping",
+		"shortDescription": "Belanja santai di jantung kota",
+		"image": "https://images.unsplash.com/photo-1484659619205-1f0e5f3f7b91?auto=format&fit=crop&w=900&q=80",
+		"imageAlt": "Modern shopping mall",
+		"rating": 4.5,
+		"reviewCount": 1130,
+		"entryFee": 0,
+		"entryFeeLabel": "Gratis",
+		"estimatedDurationMinutes": 120,
+		"coordinates": { "lat": -6.8887, "lng": 107.6039 },
+		"operatingHours": "10:00 - 22:00"
+	}
+]

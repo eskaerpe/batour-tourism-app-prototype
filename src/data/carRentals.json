@@ -1,0 +1,28 @@
+[
+	{
+		"id": "car_sedan",
+		"type": "car",
+		"label": "Mobil (Sedan)",
+		"description": "Compact sedan, suitable for small groups",
+		"capacity": "1-4 pax",
+		"image": "https://images.unsplash.com/photo-1542362567-b07e54358753?auto=format&fit=crop&w=900&q=80",
+		"imageAlt": "Gray sedan car",
+		"dailyRate": 600000,
+		"dailyRateLabel": "Rp 600.000/hari",
+		"transmissionBonus": 1,
+		"estimatedFuelConsumption": "1L per 12km"
+	},
+	{
+		"id": "car_van",
+		"type": "van",
+		"label": "Minivan (7-Seater)",
+		"description": "Spacious minivan, perfect for larger groups",
+		"capacity": "5-8 pax",
+		"image": "https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?auto=format&fit=crop&w=900&q=80",
+		"imageAlt": "White minivan car",
+		"dailyRate": 900000,
+		"dailyRateLabel": "Rp 900.000/hari",
+		"transmissionBonus": 1.2,
+		"estimatedFuelConsumption": "1L per 8km"
+	}
+]
