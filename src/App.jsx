@@ -1,13 +1,17 @@
 import React, { useEffect } from "react";
 import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 import LandingPage from "./pages/LandingPage";
+import TripSetupModal from "./pages/TripSetupModal";
 import ExplorePage from "./pages/ExplorePage";
 import GuideSelectionPage from "./pages/GuideSelectionPage";
 import CarSelectionPage from "./pages/CarSelectionPage";
+import BookerDetailsPage from "./pages/BookerDetailsPage";
 import BookingDetailsPage from "./pages/BookingDetailsPage";
+import ComprehensiveCheckoutPage from "./pages/ComprehensiveCheckoutPage";
 import PaymentOptionsPage from "./pages/PaymentOptionsPage";
 import ConfirmationPage from "./pages/ConfirmationPage";
 import CheckoutPage from "./pages/CheckoutPage";
+import PaymentSuccessPage from "./pages/PaymentSuccessPage";
 import ActiveTripPage from "./pages/ActiveTripPage";
 import { ensureDatabase, getSessionState, getUserPreferences } from "./lib/idb";
 import { useStore } from "./store/useStore";
@@ -72,6 +76,10 @@ export default function App() {
 					element={<LandingPage />}
 				/>
 				<Route
+					path="/trip-setup"
+					element={<TripSetupModal />}
+				/>
+				<Route
 					path="/explore"
 					element={<ExplorePage />}
 				/>
@@ -82,6 +90,10 @@ export default function App() {
 				<Route
 					path="/car-selection"
 					element={<CarSelectionPage />}
+				/>
+				<Route
+					path="/booker-details"
+					element={<BookerDetailsPage />}
 				/>
 				<Route
 					path="/booking-details"
@@ -97,7 +109,15 @@ export default function App() {
 				/>
 				<Route
 					path="/checkout"
+					element={<ComprehensiveCheckoutPage />}
+				/>
+				<Route
+					path="/legacy-checkout"
 					element={<CheckoutPage />}
+				/>
+				<Route
+					path="/payment-success"
+					element={<PaymentSuccessPage />}
 				/>
 				<Route
 					path="/active-trip/:bookingId"
