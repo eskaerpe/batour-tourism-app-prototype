@@ -14,16 +14,10 @@ export default function LandingPage() {
 		setCurrentPage("/");
 	}, [setCurrentPage]);
 
-	useEffect(() => {
-		if (hasVisited) {
-			navigate("/explore", { replace: true });
-		}
-	}, [hasVisited, navigate]);
-
 	return (
 		<div className="relative min-h-screen overflow-hidden bg-slate-950 text-white">
 			<img
-				src="https://images.unsplash.com/photo-1541325287890-7a5f6b1d5e1e?auto=format&fit=crop&w=1200&q=80"
+				src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?q=80&w=1634&auto=format&fit=crop"
 				alt="Bandung landscape"
 				className="absolute inset-0 h-full w-full object-cover"
 			/>
@@ -35,11 +29,11 @@ export default function LandingPage() {
 				</div>
 
 				<div className="space-y-5 rounded-[34px] bg-white/6 p-5 shadow-[0_-12px_40px_rgba(0,0,0,0.28)] backdrop-blur-sm">
-					<Badge
+					{/* <Badge
 						tone="brand"
 						className="w-fit">
 						<BadgeCheck size={14} /> SDG 8 - Empowering Locals
-					</Badge>
+					</Badge> */}
 					<div>
 						<p className="mb-3 text-sm uppercase tracking-[0.32em] text-white/65">Asisten Pribadi Travelmu</p>
 						<h1 className="max-w-[12ch] text-4xl font-black leading-[1.02] tracking-tight sm:text-5xl">Anti-Ribet Travel di Bandung</h1>
@@ -52,7 +46,7 @@ export default function LandingPage() {
 							markVisited();
 							navigate("/explore");
 						}}>
-						Mulai Eksplorasi <ArrowRight size={18} />
+						{hasVisited ? "Lanjutkan Perjalanan" : "Mulai Eksplorasi"} <ArrowRight size={18} />
 					</Button>
 				</div>
 			</div>

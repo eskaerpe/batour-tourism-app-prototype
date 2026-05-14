@@ -1,5 +1,5 @@
 const DB_NAME = "batour-db";
-const DB_VERSION = 1;
+const DB_VERSION = 2;
 
 function openDatabase() {
 	return new Promise((resolve, reject) => {
@@ -17,10 +17,10 @@ function openDatabase() {
 				database.createObjectStore("bookings", { keyPath: "bookingId" });
 			}
 			if (!database.objectStoreNames.contains("sessionState")) {
-				database.createObjectStore("sessionState", { keyPath: "sessionKey" });
+				database.createObjectStore("sessionState", { keyPath: "key" });
 			}
-			if (!database.objectStoreNames.contains("userPreferences")) {
-				database.createObjectStore("userPreferences", { keyPath: "preferenceKey" });
+			if (!database.objectStoreNames.contains("tripState")) {
+				database.createObjectStore("tripState", { keyPath: "key" });
 			}
 		};
 
@@ -51,28 +51,54 @@ export async function ensureDatabase() {
 	return openDatabase();
 }
 
-export async function getSessionState() {
+export async function initDB() {
+	return ensureDatabase();
+}
+
+export async function saveSession(key, value) {
+	return withStore("sessionState", "readwrite", (store) => store.put({ key, value }));
+}
+
+export async function getSession(key) {
+	if (!key) {
+		return null;
+	}
+
 	try {
-		return await withStore("sessionState", "readonly", (store) => requestToPromise(store.get("current")));
+		const record = await withStore("sessionState", "readonly", (store) => requestToPromise(store.get(key)));
+		return record?.value ?? null;
 	} catch {
 		return null;
 	}
+}
+
+export async function saveTripState(value) {
+	return withStore("tripState", "readwrite", (store) => store.put({ key: "current-trip", value }));
+}
+
+export async function getTripState() {
+	try {
+		const record = await withStore("tripState", "readonly", (store) => requestToPromise(store.get("current-trip")));
+		return record?.value ?? null;
+	} catch {
+		return null;
+	}
+}
+
+export async function getSessionState() {
+	return getTripState();
 }
 
 export async function saveSessionState(sessionState) {
-	return withStore("sessionState", "readwrite", (store) => store.put({ ...sessionState, sessionKey: "current" }));
+	return saveTripState(sessionState);
 }
 
 export async function getUserPreferences() {
-	try {
-		return await withStore("userPreferences", "readonly", (store) => requestToPromise(store.get("user")));
-	} catch {
-		return null;
-	}
+	return getSession("user");
 }
 
 export async function saveUserPreferences(preferences) {
-	return withStore("userPreferences", "readwrite", (store) => store.put({ ...preferences, preferenceKey: "user" }));
+	return saveSession("user", preferences);
 }
 
 export async function saveBooking(booking) {

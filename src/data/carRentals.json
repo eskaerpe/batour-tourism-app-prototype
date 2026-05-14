@@ -2,27 +2,40 @@
 	{
 		"id": "car_sedan",
 		"type": "car",
-		"label": "Mobil (Sedan)",
-		"description": "Compact sedan, suitable for small groups",
+		"label": "Mobil Sedan (4-Seater)",
+		"description": "Compact sedan, suitable for small groups and city-to-highland routes.",
 		"capacity": "1-4 pax",
-		"image": "https://images.unsplash.com/photo-1542362567-b07e54358753?auto=format&fit=crop&w=900&q=80",
+		"image": "https://astraotoshop.com/asset/article-aop/mobil-sedan-toyota_20240705.webp",
 		"imageAlt": "Gray sedan car",
 		"dailyRate": 600000,
 		"dailyRateLabel": "Rp 600.000/hari",
-		"transmissionBonus": 1,
+		"transmission": "Manual",
 		"estimatedFuelConsumption": "1L per 12km"
 	},
 	{
 		"id": "car_van",
 		"type": "van",
 		"label": "Minivan (7-Seater)",
-		"description": "Spacious minivan, perfect for larger groups",
+		"description": "Spacious van, perfect for larger groups and long-day itineraries.",
 		"capacity": "5-8 pax",
-		"image": "https://images.unsplash.com/photo-1549317661-bd32c8ce0db2?auto=format&fit=crop&w=900&q=80",
+		"image": "https://imgx.gridoto.com/crop/0x0:0x0/700x500/filters:watermark(file/2017/gridoto/img/watermark.png,5,5,60)/photo/2019/11/04/3394308833.jpg",
 		"imageAlt": "White minivan car",
 		"dailyRate": 900000,
 		"dailyRateLabel": "Rp 900.000/hari",
-		"transmissionBonus": 1.2,
+		"transmission": "Automatic",
 		"estimatedFuelConsumption": "1L per 8km"
+	},
+	{
+		"id": "car_microbus",
+		"type": "microbus",
+		"label": "Microbus Commuter (15-Seater)",
+		"description": "Large commuter van like Toyota Hiace, ideal for big families or corporate group tours.",
+		"capacity": "9-15 pax",
+		"image": "https://asset.tribunnews.com/BfbrHgRVRhlqegdfHrOFy-jIrak=/1200x675/filters:upscale():quality(30):format(webp):focal(0.5x0.5:0.5x0.5)/babel/foto/bank/originals/20251119_Toyota-Hiace.jpg",
+		"imageAlt": "White commuter van",
+		"dailyRate": 1500000,
+		"dailyRateLabel": "Rp 1.500.000/hari",
+		"transmission": "Manual",
+		"estimatedFuelConsumption": "1L per 10km"
 	}
 ]

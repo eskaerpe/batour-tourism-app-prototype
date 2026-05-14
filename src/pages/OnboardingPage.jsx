@@ -21,13 +21,13 @@ export default function OnboardingPage() {
 				</div>
 
 				<div className="space-y-5 rounded-[34px] bg-white/6 p-5 shadow-[0_-12px_40px_rgba(0,0,0,0.28)] backdrop-blur-sm">
-					<div className="inline-flex w-fit items-center gap-2 rounded-full bg-white/12 px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-white/90">
+					{/* <div className="inline-flex w-fit items-center gap-2 rounded-full bg-white/12 px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-white/90">
 						<BadgeCheck
 							size={16}
 							className="text-brand"
 						/>
 						SDG 8 - Empowering Locals
-					</div>
+					</div> */}
 					<div>
 						<p className="mb-3 text-sm uppercase tracking-[0.32em] text-white/65">Asisten Pribadi Travelmu</p>
 						<h1 className="max-w-[12ch] text-4xl font-black leading-[1.02] tracking-tight sm:text-5xl">Anti-Ribet Travel di Bandung</h1>

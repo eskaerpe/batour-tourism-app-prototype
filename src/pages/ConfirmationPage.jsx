@@ -1,9 +1,9 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { BadgeCheck, Send } from "lucide-react";
 import { BottomActionBar, Badge, Button, Card, OfflineIndicator, SectionTitle } from "../components/ui";
 import { carRentals, destinations, guides } from "../data";
-import { buildWhatsAppMessage, encodeWhatsAppUrl, formatIDR } from "../utils/batour";
+import { formatIDR } from "../utils/batour";
 import { useStore } from "../store/useStore";
 
 export default function ConfirmationPage() {
@@ -18,10 +18,7 @@ export default function ConfirmationPage() {
 	const carFee = useStore((state) => state.carFee);
 	const entryFees = useStore((state) => state.entryFees);
 	const totalCost = useStore((state) => state.totalCost);
-	const generateBooking = useStore((state) => state.generateBooking);
 	const setCurrentPage = useStore((state) => state.setCurrentPage);
-
-	const [isSubmitting, setIsSubmitting] = useState(false);
 
 	useEffect(() => {
 		setCurrentPage("/confirmation");
@@ -31,25 +28,12 @@ export default function ConfirmationPage() {
 	const guide = useMemo(() => guides.find((item) => item.id === selectedGuide) ?? null, [selectedGuide]);
 	const car = useMemo(() => carRentals.find((item) => item.id === selectedCar) ?? null, [selectedCar]);
 
-	async function handleWhatsAppHandoff() {
-		if (!isOnline || isSubmitting || !selectedPaymentOption || !selectedGuide || selectedDestinations.length === 0) {
-			return;
-		}
-
-		setIsSubmitting(true);
-		const booking = await generateBooking();
-		booking.whatsappMessageSent = true;
-		const whatsappMessage = buildWhatsAppMessage(booking);
-		window.open(encodeWhatsAppUrl(whatsappMessage), "_blank", "noopener,noreferrer");
-		navigate(`/checkout?bookingId=${booking.bookingId}`, { replace: true });
-	}
-
 	return (
 		<div className="min-h-screen bg-[linear-gradient(180deg,#fff7f1_0%,#f8fafc_18%,#f8fafc_100%)] pb-52 text-slate-900">
 			<div className="px-5 pt-6">
 				<SectionTitle
 					eyebrow="Final Review"
-					title="Confirm Before WhatsApp"
+					title="Review Before Checkout"
 					action={<OfflineIndicator isOffline={!isOnline} />}
 				/>
 
@@ -121,17 +105,13 @@ export default function ConfirmationPage() {
 			<BottomActionBar>
 				<Button
 					className="w-full py-4 text-base"
-					disabled={!isOnline || isSubmitting || !selectedPaymentOption}
-					onClick={handleWhatsAppHandoff}>
-					{isSubmitting ? (
-						"Sending..."
-					) : (
-						<>
-							<Send size={18} /> Selesaikan Pemesanan via WhatsApp
-						</>
-					)}
+					disabled={!selectedPaymentOption}
+					onClick={() => navigate("/checkout")}>
+					<>
+						<Send size={18} /> Lanjut ke Checkout
+					</>
 				</Button>
-				<p className="mt-3 text-center text-xs text-slate-500">Kamu akan diarahkan ke WhatsApp untuk handoff pembayaran.</p>
+				<p className="mt-3 text-center text-xs text-slate-500">Checkout akan menyiapkan booking reference dan membuka WhatsApp handoff.</p>
 			</BottomActionBar>
 		</div>
 	);

@@ -7,7 +7,7 @@ export default defineConfig({
 		react(),
 		VitePWA({
 			registerType: "autoUpdate",
-			includeAssets: ["icons/icon-192.svg", "icons/icon-512.svg"],
+			includeAssets: ["https://www.svgrepo.com/show/530661/map-location.svg", "https://www.svgrepo.com/show/530661/map-location.svg"],
 			manifest: {
 				name: "BaTour",
 				short_name: "BaTour",
@@ -16,8 +16,8 @@ export default defineConfig({
 				background_color: "#f8fafc",
 				display: "standalone",
 				icons: [
-					{ src: "/icons/icon-192.svg", sizes: "192x192", type: "image/svg+xml" },
-					{ src: "/icons/icon-512.svg", sizes: "512x512", type: "image/svg+xml" },
+					{ src: "https://www.svgrepo.com/show/530661/map-location.svg", sizes: "192x192", type: "image/svg+xml" },
+					{ src: "https://www.svgrepo.com/show/530661/map-location.svg", sizes: "512x512", type: "image/svg+xml" },
 				],
 			},
 			workbox: {

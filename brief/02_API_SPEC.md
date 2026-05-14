@@ -1,45 +1,33 @@
-# API Specification (Front-End Contracts)
-## BaTour - MVP (Client-Side Only)
+# API Specification: Data Contracts & Client-Side Architecture
+## BaTour - MVP (Front-End Only)
+
+**Stack:**  
+React 18+ | Vite | React Router v6 | Zustand | IndexedDB | Tailwind CSS
 
 **Version:** 1.0  
-**Status:** MVP - No Backend API  
-**Last Updated:** May 13, 2026  
+**Status:** Ready for Implementation  
+**Last Updated:** May 14, 2026
 
 ---
 
-## 1. Architecture Overview
+## Architecture Overview
 
-This is a **front-end-only MVP**. There are no HTTP API endpoints. All data is:
-- **Static JSON files** (destinations, guides, car rentals, transit matrix)
-- **Browser storage** (IndexedDB for trip bookings & session state)
-- **WhatsApp API** (third-party handoff, not controlled by us)
+This is a **100% client-side MVP**. There are no HTTP endpoints. All data is:
+- **Static JSON files** (destinations, guides, car rentals, transit matrix) — bundled at build time
+- **Browser IndexedDB** (trip bookings, session state) — persisted locally
+- **WhatsApp API** (third-party handoff) — URL scheme only, not proprietary payment gateway
 
-The "API Specification" defines the **data contracts** that the frontend consumes and produces.
-
----
-
-## 2. Technology Stack
-
-| Layer | Technology |
-|-------|-----------|
-| **Framework** | React 18+ |
-| **State Management** | Zustand + IndexedDB persistence plugin |
-| **Storage** | IndexedDB (local trip data) |
-| **Static Data** | JSON files bundled with app |
-| **Third-Party Integration** | WhatsApp Web API (URL scheme) |
-| **QR Generation** | qrcode.react (client-side) |
-| **Build Tool** | Vite |
-| **Deployment** | Vercel (static hosting) |
+The "API Specification" defines the **exact data contracts** consumed and produced by the frontend.
 
 ---
 
-## 3. Static Data Contracts (JSON Files)
+## 1. Static Data Contracts (JSON Files)
 
-### 3.1 destinations.json
+### 1.1 destinations.json
 
 **Purpose:** Define all tourist destinations, categories, and fees.
 
-**Schema:**
+**Schema & Example:**
 
 ```json
 [
@@ -62,125 +50,48 @@ The "API Specification" defines the **data contracts** that the frontend consume
       "lng": 107.5678
     },
     "operatingHours": "08:00 - 17:00"
-  },
-  {
-    "id": "dest_002",
-    "name": "Situ Patenggang",
-    "category": "tempat-wisata",
-    "zone": "Ciwidey",
-    "description": "Mountain lake surrounded by pine forests",
-    "shortDescription": "Danau di tengah hutan pinus",
-    "image": "/images/destinations/situ-patenggang.webp",
-    "imageAlt": "Lake surrounded by pine trees",
-    "rating": 4.6,
-    "reviewCount": 890,
-    "entryFee": 30000,
-    "entryFeeLabel": "Rp 30.000",
-    "estimatedDurationMinutes": 75,
-    "coordinates": {
-      "lat": -7.1456,
-      "lng": 107.5789
-    },
-    "operatingHours": "08:00 - 17:00"
-  },
-  {
-    "id": "dest_003",
-    "name": "Strawberry Farm",
-    "category": "tempat-wisata",
-    "zone": "Lembang",
-    "description": "Pick-your-own strawberry farm with farm-to-table dining",
-    "shortDescription": "Petik strawberry sendiri",
-    "image": "/images/destinations/strawberry-farm.webp",
-    "imageAlt": "Strawberry picking activity",
-    "rating": 4.7,
-    "reviewCount": 560,
-    "entryFee": 40000,
-    "entryFeeLabel": "Rp 40.000",
-    "estimatedDurationMinutes": 120,
-    "coordinates": {
-      "lat": -6.8123,
-      "lng": 107.6045
-    },
-    "operatingHours": "09:00 - 17:00"
-  },
-  {
-    "id": "dest_004",
-    "name": "Nasi Timbel Warung",
-    "category": "tempat-makan",
-    "zone": "Bandung Pusat",
-    "description": "Traditional Sundanese rice wrapped in banana leaves",
-    "shortDescription": "Nasi Timbel khas Sunda",
-    "image": "/images/destinations/nasi-timbel.webp",
-    "imageAlt": "Traditional Sundanese rice meal",
-    "rating": 4.5,
-    "reviewCount": 2100,
-    "entryFee": 0,
-    "entryFeeLabel": "Gratis (Beli Makanan)",
-    "estimatedDurationMinutes": 60,
-    "coordinates": {
-      "lat": -6.9147,
-      "lng": 107.6053
-    },
-    "operatingHours": "10:00 - 21:00"
-  },
-  {
-    "id": "dest_005",
-    "name": "Glamping Lakeside",
-    "category": "tempat-wisata",
-    "zone": "Ciwidey",
-    "description": "Glamorous camping experience with lake views",
-    "shortDescription": "Glamping dengan pemandangan danau",
-    "image": "/images/destinations/glamping.webp",
-    "imageAlt": "Glamping tent by the lake",
-    "rating": 4.9,
-    "reviewCount": 340,
-    "entryFee": 0,
-    "entryFeeLabel": "Gratis (Paket Menginap)",
-    "estimatedDurationMinutes": 180,
-    "coordinates": {
-      "lat": -7.1389,
-      "lng": 107.5701
-    },
-    "operatingHours": "24 jam"
-  },
-  {
-    "id": "dest_006",
-    "name": "Bandung Trade Centre (BTC)",
-    "category": "toko-oleh-oleh",
-    "zone": "Bandung Pusat",
-    "description": "Shopping mall for textiles, souvenirs, and local goods",
-    "shortDescription": "Oleh-oleh dan tekstil",
-    "image": "/images/destinations/btc.webp",
-    "imageAlt": "Shopping mall entrance",
-    "rating": 4.3,
-    "reviewCount": 1800,
-    "entryFee": 0,
-    "entryFeeLabel": "Gratis (Belanja)",
-    "estimatedDurationMinutes": 120,
-    "coordinates": {
-      "lat": -6.9082,
-      "lng": 107.6089
-    },
-    "operatingHours": "10:00 - 21:00"
   }
 ]
 ```
 
-**Constraints:**
-- `id`: Unique string, format `dest_XXX`
-- `category`: One of `tempat-wisata`, `tempat-makan`, `toko-oleh-oleh`
-- `entryFee`: Integer (Rupiah), minimum 0
-- `estimatedDurationMinutes`: Integer, minimum 30
-- `rating`: Float 1-5
-- `image`: Optimized WebP, < 100KB
+**Field Constraints:**
+
+| Field | Type | Constraints | Example |
+|-------|------|-----------|---------|
+| `id` | string | Format: `dest_XXX`, unique | `dest_001` |
+| `name` | string | Required, 1-100 chars | `Kawah Putih` |
+| `category` | string | Enum: `tempat-wisata`, `tempat-makan`, `toko-oleh-oleh` | `tempat-wisata` |
+| `zone` | string | Required, matches transit matrix | `Ciwidey` |
+| `description` | string | Full description, < 500 chars | `Crater lake with...` |
+| `shortDescription` | string | One-liner, < 50 chars | `Danau Kawah Putih...` |
+| `image` | string | Path to WebP, < 100KB | `/images/destinations/kawah-putih.webp` |
+| `imageAlt` | string | Alt text for accessibility | `White crater lake...` |
+| `rating` | number | Float 1-5, 1 decimal | `4.8` |
+| `reviewCount` | number | Integer ≥ 0 | `1250` |
+| `entryFee` | number | Integer, Rupiah, ≥ 0 | `50000` |
+| `entryFeeLabel` | string | Pre-formatted label | `Rp 50.000` |
+| `estimatedDurationMinutes` | number | Integer ≥ 30 | `90` |
+| `coordinates` | object | { lat, lng } | `{ "lat": -7.1234, "lng": 107.5678 }` |
+| `operatingHours` | string | Format: `HH:MM - HH:MM` or `24 jam` | `08:00 - 17:00` |
+
+**Validation in Component:**
+```javascript
+// Example validation (in utils/validation.js)
+const validateDestination = (dest) => {
+  if (!dest.id || !dest.id.startsWith('dest_')) throw new Error('Invalid dest ID');
+  if (!['tempat-wisata', 'tempat-makan', 'toko-oleh-oleh'].includes(dest.category)) throw new Error('Invalid category');
+  if (dest.entryFee < 0) throw new Error('Entry fee cannot be negative');
+  if (dest.estimatedDurationMinutes < 30) throw new Error('Duration must be ≥ 30 min');
+};
+```
 
 ---
 
-### 3.2 guides.json
+### 1.2 guides.json
 
 **Purpose:** Define all available tour guides with rates and contact info.
 
-**Schema:**
+**Schema & Example:**
 
 ```json
 [
@@ -201,61 +112,49 @@ The "API Specification" defines the **data contracts** that the frontend consume
     "certified": true,
     "yearsExperience": 20,
     "maxGroupSize": 8
-  },
-  {
-    "id": "guide_002",
-    "name": "Siti Nurhaliza",
-    "photo": "/images/guides/siti.webp",
-    "photoAlt": "Siti smiling",
-    "rating": 4.7,
-    "reviewCount": 220,
-    "dailyRate": 450000,
-    "dailyRateLabel": "Rp 450.000/hari",
-    "languages": ["Indonesian", "English", "Mandarin"],
-    "phone": "6282456789012",
-    "whatsappNumber": "6282456789012",
-    "bio": "Expert in culinary tours and local shopping. Fluent in Mandarin for Chinese tourists.",
-    "specialties": ["Culinary", "Shopping", "Local Culture"],
-    "certified": true,
-    "yearsExperience": 8,
-    "maxGroupSize": 6
-  },
-  {
-    "id": "guide_003",
-    "name": "Adi Suryanto",
-    "photo": "/images/guides/adi.webp",
-    "photoAlt": "Adi smiling",
-    "rating": 4.6,
-    "reviewCount": 185,
-    "dailyRate": 400000,
-    "dailyRateLabel": "Rp 400.000/hari",
-    "languages": ["Indonesian", "English", "Japanese"],
-    "phone": "6283567890123",
-    "whatsappNumber": "6283567890123",
-    "bio": "Young and energetic guide fluent in Japanese. Perfect for adventure and modern attraction tours.",
-    "specialties": ["Adventure", "Modern Attractions", "Photography"],
-    "certified": true,
-    "yearsExperience": 5,
-    "maxGroupSize": 8
   }
 ]
 ```
 
-**Constraints:**
-- `id`: Unique string, format `guide_XXX`
-- `dailyRate`: Integer (Rupiah), minimum 300000
-- `phone`: String format `62XXXXXXXXXX`
-- `rating`: Float 1-5
-- `maxGroupSize`: Integer, minimum 2, maximum 15
-- `languages`: Array of strings, minimum 1
+**Field Constraints:**
+
+| Field | Type | Constraints | Example |
+|-------|------|-----------|---------|
+| `id` | string | Format: `guide_XXX`, unique | `guide_001` |
+| `name` | string | Required, 1-50 chars | `Pak Budi` |
+| `photo` | string | Path to WebP, < 50KB | `/images/guides/budi.webp` |
+| `photoAlt` | string | Alt text | `Pak Budi smiling` |
+| `rating` | number | Float 1-5, 1 decimal | `4.9` |
+| `reviewCount` | number | Integer ≥ 0 | `340` |
+| `dailyRate` | number | Integer, Rupiah, ≥ 300000 | `500000` |
+| `dailyRateLabel` | string | Pre-formatted | `Rp 500.000/hari` |
+| `languages` | array | Array of strings, ≥ 1 | `["Indonesian", "English"]` |
+| `phone` | string | Format: `62XXXXXXXXXX` (11-13 digits) | `6281234567890` |
+| `whatsappNumber` | string | Same format as phone | `6281234567890` |
+| `bio` | string | Biography, < 500 chars | `20+ years experience...` |
+| `specialties` | array | Array of strings | `["Nature", "Cultural"]` |
+| `certified` | boolean | True/false | `true` |
+| `yearsExperience` | number | Integer ≥ 0 | `20` |
+| `maxGroupSize` | number | Integer 2-15 | `8` |
+
+**Validation in Component:**
+```javascript
+const validateGuide = (guide) => {
+  if (!guide.id || !guide.id.startsWith('guide_')) throw new Error('Invalid guide ID');
+  if (guide.dailyRate < 300000) throw new Error('Rate too low');
+  if (!guide.phone.match(/^62\d{9,11}$/)) throw new Error('Invalid phone format');
+  if (guide.languages.length === 0) throw new Error('At least 1 language required');
+  if (guide.maxGroupSize < 2 || guide.maxGroupSize > 15) throw new Error('Invalid group size');
+};
+```
 
 ---
 
-### 3.3 carRentals.json
+### 1.3 carRentals.json
 
 **Purpose:** Define car rental options with pricing and capacity.
 
-**Schema:**
+**Schema & Example:**
 
 ```json
 [
@@ -269,280 +168,316 @@ The "API Specification" defines the **data contracts** that the frontend consume
     "imageAlt": "Gray sedan car",
     "dailyRate": 600000,
     "dailyRateLabel": "Rp 600.000/hari",
-    "transmissionBonus": 1.0,
+    "transmission": "Manual",
     "estimatedFuelConsumption": "1L per 12km"
   },
   {
     "id": "car_van",
     "type": "van",
     "label": "Minivan (7-Seater)",
-    "description": "Spacious minivan, perfect for larger groups",
+    "description": "Spacious van for larger groups",
     "capacity": "5-8 pax",
     "image": "/images/cars/van.webp",
-    "imageAlt": "White minivan car",
+    "imageAlt": "White minivan",
     "dailyRate": 900000,
     "dailyRateLabel": "Rp 900.000/hari",
-    "transmissionBonus": 1.2,
+    "transmission": "Automatic",
     "estimatedFuelConsumption": "1L per 8km"
   }
 ]
 ```
 
-**Constraints:**
-- `id`: Unique string
-- `type`: One of `car`, `van`
-- `dailyRate`: Integer (Rupiah)
-- `transmissionBonus`: Float (1.0 = normal travel time, 1.2 = slower travel time due to size)
+**Field Constraints:**
+
+| Field | Type | Constraints | Example |
+|-------|------|-----------|---------|
+| `id` | string | Format: `car_XXX`, unique | `car_sedan` |
+| `type` | string | Enum: `car`, `van`, (future: `motorcycle`, `bus`) | `car` |
+| `label` | string | Display label, < 50 chars | `Mobil (Sedan)` |
+| `description` | string | < 200 chars | `Compact sedan...` |
+| `capacity` | string | Format: `X-Y pax` | `1-4 pax` |
+| `image` | string | Path to WebP, < 100KB | `/images/cars/sedan.webp` |
+| `imageAlt` | string | Alt text | `Gray sedan car` |
+| `dailyRate` | number | Integer, Rupiah, ≥ 300000 | `600000` |
+| `dailyRateLabel` | string | Pre-formatted | `Rp 600.000/hari` |
+| `transmission` | string | `Manual` or `Automatic` | `Manual` |
+| `estimatedFuelConsumption` | string | Informational, no validation | `1L per 12km` |
 
 ---
 
-### 3.4 transitMatrix.json
+### 1.4 transitMatrix.json
 
 **Purpose:** Define travel times between zones for timeline calculation.
 
-**Schema:**
+**Schema & Example:**
 
 ```json
 {
-  "zones": ["Bandung Pusat", "Ciwidey", "Lembang", "Tangkuban Perahu", "Bogor"],
+  "zones": ["Bandung Pusat", "Ciwidey", "Lembang", "Tangkuban Perahu"],
   "matrix": {
     "Bandung Pusat->Ciwidey": 45,
-    "Bandung Pusat->Lembang": 40,
-    "Bandung Pusat->Tangkuban Perahu": 60,
-    "Bandung Pusat->Bogor": 90,
     "Ciwidey->Lembang": 90,
-    "Ciwidey->Tangkuban Perahu": 75,
-    "Ciwidey->Bogor": 120,
     "Lembang->Tangkuban Perahu": 30,
-    "Lembang->Bogor": 50,
-    "Tangkuban Perahu->Bogor": 80
-  },
-  "defaultStartTime": "08:00",
-  "bufferMinutesBetweenStops": 15
-}
-```
-
-**Constraints:**
-- `matrix` keys: Format `Zone1->Zone2` (bidirectional, must be defined both ways or use lookup logic)
-- Values: Integer minutes
-- `defaultStartTime`: ISO 8601 time string
-- `bufferMinutesBetweenStops`: Integer, minimum 10
-
----
-
-### 3.5 mitra.json (Optional, for Phase 2)
-
-**Purpose:** Define partner shops/restaurants for potential recommendations.
-
-**Schema (MVP may not need this):**
-
-```json
-[
-  {
-    "id": "mitra_001",
-    "name": "Toko Oleh-Oleh Bandung",
-    "category": "shop",
-    "phone": "6281234567890",
-    "address": "Jl. Riau No. 10, Bandung"
+    "Bandung Pusat->Lembang": 60,
+    "Ciwidey->Bandung Pusat": 45,
+    "Lembang->Ciwidey": 90,
+    "Tangkuban Perahu->Lembang": 30,
+    "Lembang->Bandung Pusat": 60,
+    "Bandung Pusat->Tangkuban Perahu": 120,
+    "Tangkuban Perahu->Bandung Pusat": 120
   }
-]
+}
 ```
 
----
+**Field Constraints:**
 
-## 4. IndexedDB Schema (Browser Storage)
+| Field | Type | Constraints | Example |
+|-------|------|-----------|---------|
+| `zones` | array | Array of zone names (3-10 zones) | `["Bandung Pusat", "Ciwidey"]` |
+| `matrix` | object | Key format: `FROM->TO`, value is minutes (integer) | `"Bandung Pusat->Ciwidey": 45` |
 
-### 4.1 Database: `batour-db`
-
-#### Store 1: `bookings`
-
-**Purpose:** Store completed trip bookings and their status.
-
-**Key Path:** `bookingId` (unique)
-
-**Schema:**
-
-```json
-{
-  "bookingId": "BATOUR-XY7Z9K",
-  "createdAt": "2026-05-13T10:30:00Z",
-  "visitDate": null,
-  "status": "pending",
-  "paymentStatus": "not-paid",
-  "destinationIds": ["dest_001", "dest_002", "dest_003"],
-  "guideId": "guide_001",
-  "carId": "car_sedan",
-  "paymentOption": "DP_50",
-  "totalCost": 1480000,
-  "guideFee": 500000,
-  "carFee": 600000,
-  "entryFees": [
-    { "destinationId": "dest_001", "amount": 50000, "name": "Kawah Putih" },
-    { "destinationId": "dest_002", "amount": 30000, "name": "Situ Patenggang" },
-    { "destinationId": "dest_003", "amount": 0, "name": "Glamping Lakeside" }
-  ],
-  "timeline": [
-    {
-      "step": 1,
-      "destinationId": "dest_001",
-      "name": "Kawah Putih",
-      "scheduledTime": "09:00",
-      "estimatedDurationMinutes": 90,
-      "zone": "Ciwidey"
-    },
-    {
-      "step": 2,
-      "destinationId": "dest_002",
-      "name": "Situ Patenggang",
-      "scheduledTime": "10:45",
-      "estimatedDurationMinutes": 75,
-      "zone": "Ciwidey"
+**Validation in Component:**
+```javascript
+const validateTransitMatrix = (matrix) => {
+  matrix.zones.forEach(zone => {
+    if (!matrix.matrix[`${zone}->${matrix.zones[0]}`] && zone !== matrix.zones[0]) {
+      throw new Error(`Missing transit time for ${zone}`);
     }
-  ],
-  "whatsappMessageSent": true,
-  "whatsappContactPhone": "6281234567890",
-  "confirmationDetails": null,
-  "notes": ""
-}
-```
-
-**Constraints:**
-- `bookingId`: UUID or short code (BATOUR-XXXXXX)
-- `status`: One of `pending`, `confirmed`, `completed`, `cancelled`
-- `paymentStatus`: One of `not-paid`, `partially-paid`, `fully-paid`
-- `paymentOption`: One of `DP_50`, `FULL`
-- `createdAt`: ISO 8601 timestamp
-
-#### Store 2: `sessionState`
-
-**Purpose:** Store user's current selection state (destinations, guide, car) for recovery if page refreshes.
-
-**Key Path:** `sessionKey` (single record, always "current")
-
-**Schema:**
-
-```json
-{
-  "sessionKey": "current",
-  "lastUpdated": "2026-05-13T10:15:00Z",
-  "selectedDestinationIds": ["dest_001", "dest_002"],
-  "selectedGuideId": "guide_001",
-  "selectedCarId": "car_sedan",
-  "selectedPaymentOption": null,
-  "currentPage": "/booking-details"
-}
-```
-
-#### Store 3: `userPreferences`
-
-**Purpose:** Store user preferences for repeated visits.
-
-**Key Path:** `preferenceKey` (single record, always "user")
-
-**Schema:**
-
-```json
-{
-  "preferenceKey": "user",
-  "lastVisit": "2026-05-13T10:30:00Z",
-  "hasVisited": true,
-  "preferredLanguage": "id",
-  "theme": "light"
-}
+  });
+};
 ```
 
 ---
 
-## 5. Zustand State Store (Runtime)
+## 2. Zustand State Stores (Runtime)
 
-### 5.1 Trip Store (tripStore.js)
+### 2.1 tripStore.js
 
-**Purpose:** Manage the user's trip building state in memory.
+**Purpose:** Manage the user's trip building state in memory and persisted to IndexedDB.
 
-**Schema:**
+**Store Schema:**
 
 ```javascript
 {
-  // Selection state
-  selectedDestinations: [],              // [dest_id, ...]
-  selectedGuide: null,                   // guide_id or null
-  selectedCar: null,                     // car_id or null
+  // ===== Selection State =====
+  selectedDestinations: [],              // Array of destination IDs (max 3)
+  selectedGuide: null,                   // Single guide ID or null
+  selectedCar: null,                     // Single car ID or null (null = no car)
   selectedPaymentOption: null,           // 'DP_50' | 'FULL' | null
   
-  // Computed state
-  totalCost: 0,                          // auto-calculated
+  // ===== Computed State (Auto-Calculated) =====
+  totalCost: 0,                          // guideFee + carFee + sum(entryFees)
   guideFee: 0,                           // from guide.dailyRate
   carFee: 0,                             // from car.dailyRate or 0
-  entryFees: [],                         // array of {destinationId, amount}
-  timeline: [],                          // array of timeline steps
+  entryFees: [],                         // Array: { destinationId, amount }
+  timeline: [],                          // Array of timeline steps
   
-  // Booking state
-  currentBooking: null,                  // generated at checkout
-  bookingId: null,                       // UUID
+  // ===== Booking State =====
+  currentBooking: null,                  // Full booking object after generation
+  bookingId: null,                       // UUID string (BATOUR-XXXXXX)
   
-  // Actions
-  addDestination(destId),                // max 3, add to selected
-  removeDestination(destId),             // remove from selected
-  clearDestinations(),                   // reset all
+  // ===== Actions =====
+  addDestination(destId),                // Add destination (max 3 enforced)
+  removeDestination(destId),             // Remove destination
+  clearDestinations(),                   // Clear all destinations
   
-  setGuide(guideId),                     // set selected guide
-  clearGuide(),                          // reset guide
+  setGuide(guideId),                     // Set guide (single only)
+  clearGuide(),                          // Clear guide
   
-  setCar(carId),                         // set selected car
-  clearCar(),                            // no car selected
+  setCar(carId),                         // Set car or null
+  clearCar(),                            // Clear car (no car selected)
   
   setPaymentOption(option),              // 'DP_50' | 'FULL'
   
-  calculateTotal(),                      // computes totalCost, breakdown
+  calculateTotal(),                      // Recompute totalCost, breakdown, timeline
   
-  generateBooking(),                     // creates bookingId, persists to IndexedDB
+  generateBooking(),                     // Create bookingId, save to IndexedDB
   
-  resetTrip(),                           // clears all selections
+  resetTrip(),                           // Clear all selections
   
-  // Persistence (via persist middleware)
-  // Auto-saves to IndexedDB sessionState on every state change
+  loadFromIndexedDB(),                   // Recover session state on app load
 }
 ```
 
-### 5.2 UI Store (uiStore.js)
+**Store Persistence:**
+- Middleware: Zustand `persist` plugin
+- Storage: IndexedDB, key: `tripStore`
+- Auto-save: Every mutation updates IndexedDB
+- Recovery: On app load, state restored from `tripStore` in IndexedDB
 
-**Purpose:** Manage UI state (loading, errors, offline status).
+**Example Usage:**
 
-**Schema:**
+```javascript
+import { useTrip } from '@/stores/tripStore';
+
+// In component
+const store = useTrip();
+store.addDestination('dest_001');      // Add destination
+store.setGuide('guide_001');            // Set guide
+store.setCar('car_sedan');              // Set car
+store.calculateTotal();                 // Compute costs
+console.log(store.totalCost);           // 1,190,000 (500k guide + 600k car + 90k entry)
+store.generateBooking();                // Create bookingId, persist to IndexedDB
+```
+
+---
+
+### 2.2 uiStore.js
+
+**Purpose:** Manage UI state (loading, errors, offline status, notifications).
+
+**Store Schema:**
 
 ```javascript
 {
-  isOnline: true,                        // online/offline status
-  isLoading: false,                      // for API calls (not used in MVP)
-  error: null,                           // error message
-  successMessage: null,                  // success toast
+  isOnline: true,                        // true = online, false = offline
+  isLoading: false,                      // For async operations (not used in MVP)
+  error: null,                           // Error message string
+  successMessage: null,                  // Success toast message
   
-  setOnline(bool),
-  setLoading(bool),
-  setError(message),
-  clearError(),
-  setSuccess(message),
-  clearSuccess()
+  // ===== Actions =====
+  setOnline(bool),                       // Update online status
+  setLoading(bool),                      // Set loading state
+  setError(message),                     // Set error message
+  clearError(),                          // Clear error
+  setSuccess(message),                   // Set success message
+  clearSuccess(),                        // Clear success
+}
+```
+
+**Example Usage:**
+
+```javascript
+const ui = useUI();
+ui.setError('Pilih minimal 1 destinasi');
+setTimeout(() => ui.clearError(), 3000);
+```
+
+---
+
+## 3. IndexedDB Storage Schema
+
+### 3.1 sessionState Store
+
+**Purpose:** Persist trip building session across browser closes.
+
+**Key:** `'user'` (single key-value pair)
+
+**Value Schema:**
+
+```javascript
+{
+  lastVisit: "2026-05-13T10:30:00Z",    // ISO 8601 timestamp
+  hasVisited: true,                      // Return user indicator
+  preferredLanguage: "id",               // Future: user language preference
+  theme: "light"                         // Future: dark mode toggle
 }
 ```
 
 ---
 
-## 6. WhatsApp API Integration (Third-Party)
+### 3.2 tripState Store
 
-### 6.1 WhatsApp Web Handoff
+**Purpose:** Persist trip building state (selectedDestinations, selectedGuide, etc).
 
-**Endpoint (Client-Side URL Scheme):**
+**Key:** `'current-trip'` (single key-value pair)
 
-```
-wa.me/6281234567890/?text=<URL_ENCODED_MESSAGE>
-```
-
-**Message Generation Logic:**
+**Value Schema:** (matches tripStore schema from 2.1)
 
 ```javascript
-const generateWhatsAppMessage = (booking) => {
-  const destinations = booking.destinationIds
+{
+  selectedDestinations: ["dest_001", "dest_003"],
+  selectedGuide: "guide_001",
+  selectedCar: "car_sedan",
+  selectedPaymentOption: "DP_50",
+  totalCost: 1190000,
+  guideFee: 500000,
+  carFee: 600000,
+  entryFees: [
+    { destinationId: "dest_001", amount: 50000 },
+    { destinationId: "dest_003", amount: 40000 }
+  ],
+  timeline: [
+    { step: 1, destination: "Kawah Putih", arrivalTime: "08:00", duration: 90 },
+    { step: 2, destination: "Strawberry Farm", arrivalTime: "10:15", duration: 120 }
+  ]
+}
+```
+
+---
+
+### 3.3 bookings Store
+
+**Purpose:** Persist completed bookings for offline trip access.
+
+**Key:** `bookingId` (e.g., `'BATOUR-ABC123'`)
+
+**Value Schema:**
+
+```javascript
+{
+  bookingId: "BATOUR-ABC123",            // Unique booking reference
+  createdAt: "2026-05-13T15:30:00Z",    // ISO 8601 timestamp
+  tripDate: "2026-06-15",                // User-provided date (optional)
+  destinationIds: ["dest_001", "dest_003"],
+  destinationNames: ["Kawah Putih", "Strawberry Farm"],
+  guideId: "guide_001",
+  guideName: "Pak Budi",
+  guidePhoto: "/images/guides/budi.webp",
+  guidePhone: "6281234567890",
+  carId: "car_sedan",
+  carLabel: "Mobil (Sedan)",
+  paymentOption: "DP_50",
+  guideFee: 500000,
+  carFee: 600000,
+  entryFees: [50000, 40000],
+  totalCost: 1190000,
+  dpAmount: 595000,                      // 50% if DP_50, else totalCost
+  timeline: [
+    { step: 1, name: "Kawah Putih", arrivalTime: "08:00", duration: 90 },
+    { step: 2, name: "Strawberry Farm", arrivalTime: "10:15", duration: 120 }
+  ],
+  status: "pending"                      // pending | confirmed | completed
+}
+```
+
+---
+
+## 4. WhatsApp API Integration (Third-Party)
+
+### 4.1 WhatsApp Web Deep Link
+
+**URL Scheme:**
+
+```
+wa.me/{PHONE}/?text={ENCODED_MESSAGE}
+```
+
+**Example:**
+
+```
+https://wa.me/6281234567890/?text=Halo%20BaTour%21%20%F0%9F%91%8B%0A%0ASaya%20ingin%20booking%20trip...
+```
+
+### 4.2 Message Generation Function
+
+**Location:** `utils/whatsappFormatter.js`
+
+**Input:** Booking object from tripStore
+
+**Output:** Formatted WhatsApp message (plain text)
+
+**Function Signature:**
+
+```javascript
+function generateWhatsAppMessage(booking, destinations, guides, carRentals) {
+  // Input validation
+  if (!booking || !destinations || !guides) {
+    throw new Error('Missing required data');
+  }
+  
+  // Generate message
+  const destinationText = booking.destinationIds
     .map((id, idx) => {
       const dest = destinations.find(d => d.id === id);
       const fee = dest.entryFee > 0 ? `(Rp ${dest.entryFee.toLocaleString('id-ID')})` : '(Gratis)';
@@ -555,15 +490,14 @@ const generateWhatsAppMessage = (booking) => {
     ? carRentals.find(c => c.id === booking.carId).label 
     : 'Kendaraan dari guide';
   
-  const message = `
-Halo BaTour! 👋
+  const message = `Halo BaTour! 👋
 
 Saya ingin booking trip:
 
 📅 **Tanggal Kunjungan:** [Mohon dikonfirmasi via WhatsApp]
 
 🗺️ **Destinasi:**
-${destinations}
+${destinationText}
 
 👤 **Tour Guide:** ${guide.name} (Rating: ${'⭐'.repeat(Math.round(guide.rating))})
 
@@ -571,150 +505,234 @@ ${destinations}
 
 💰 **Rincian Biaya:**
 - Guide: Rp ${booking.guideFee.toLocaleString('id-ID')}
-- ${booking.carFee > 0 ? `Mobil: Rp ${booking.carFee.toLocaleString('id-ID')}\n- ` : ''}Entry Fees: Rp ${booking.entryFees.reduce((sum, f) => sum + f.amount, 0).toLocaleString('id-ID')}
+${booking.carFee > 0 ? `- Mobil: Rp ${booking.carFee.toLocaleString('id-ID')}\n` : ''}
+- Entry Fees: Rp ${booking.entryFees.reduce((sum, f) => sum + f.amount, 0).toLocaleString('id-ID')}
 - **Total: Rp ${booking.totalCost.toLocaleString('id-ID')}**
 
-💳 **Opsi Pembayaran:** ${booking.paymentOption === 'DP_50' ? 'DP 50% (Rp ' + (booking.totalCost * 0.5).toLocaleString('id-ID') + ' sekarang)' : 'Full Payment (Rp ' + booking.totalCost + ' sekarang)'}
+💳 **Opsi Pembayaran:** ${booking.paymentOption === 'DP_50' 
+  ? 'DP 50% (Rp ' + (booking.totalCost * 0.5).toLocaleString('id-ID') + ' sekarang, 50% di hari kunjungan)' 
+  : 'Full Payment (Rp ' + booking.totalCost.toLocaleString('id-ID') + ' sekarang, diskon 5%)'}
 
 🔖 **ID Pemesanan:** ${booking.bookingId}
 
-Mohon konfirmasi ketersediaan & rekening untuk pembayaran. Terima kasih! 🙏
-  `.trim();
+Mohon konfirmasi ketersediaan & rekening untuk pembayaran. Terima kasih! 🙏`;
   
   return message;
-};
+}
 ```
 
-**Integration Point:**
-- Called on `/confirmation` when "Selesaikan Pemesanan" button clicked
-- Message URL-encoded and appended to `wa.me/` URL
-- Opens WhatsApp (Web or mobile app, depending on device)
-- Redirects to `/checkout` on return
+**Integration:**
+
+1. User clicks "Selesaikan Pemesanan" on `/confirmation`
+2. `generateWhatsAppMessage()` called with current booking data
+3. Message URL-encoded: `encodeURIComponent(message)`
+4. Opens: `window.location.href = 'https://wa.me/6281234567890/?text=' + encoded`
+5. Redirects to `/checkout` after WhatsApp opens
 
 ---
 
-## 7. Offline-First Caching Strategy
+## 5. Service Worker & Offline Caching
 
-### 7.1 Service Worker Precache
+### 5.1 Precache Strategy
 
-**Files precached on app load:**
+**Plugin:** `vite-plugin-pwa`
+
+**Files Precached:**
 - `index.html`
-- All routes (static)
-- All destination images
-- All guide photos
-- Car type images
+- All route bundles (code-split by route)
+- All destination images (via glob pattern)
+- All guide photos (via glob pattern)
+- Car rental images
 - Core CSS/JS bundles
 
-**Cache invalidation:** Versioned bundles + `vite-plugin-pwa`
+**Cache Invalidation:**
+- Hash-based: Vite appends content hash to filenames (`app.abc123.js`)
+- vite-plugin-pwa handles versioning automatically
+- Old caches cleared on new app version
 
-### 7.2 IndexedDB Persistence
+### 5.2 Offline Experience
 
-**Automatic persistence:**
-- All trip state saved to `sessionState` store on every change (via Zustand persist)
-- Bookings saved to `bookings` store when generated
-- Recovered on app reload
-
-**Manual recovery:**
-- User navigates to `/active-trip/:bookingId` → loads from IndexedDB
-- If bookingId not found → shows error with WhatsApp link
+| Route | Offline Availability |
+|-------|---------------------|
+| `/` (Landing) | ✅ 100% (HTML + CSS cached) |
+| `/explore` | ⚠️ 90% (images cached, search disabled) |
+| `/guide-selection` | ⚠️ 90% (guide photos cached, no filtering) |
+| `/car-selection` | ✅ 100% (all data bundled) |
+| `/booking-details` | ✅ 100% (all data bundled) |
+| `/payment-options` | ✅ 100% (all data bundled) |
+| `/confirmation` | ✅ 100% (all data bundled) |
+| `/checkout` | ❌ 0% (requires WhatsApp, needs internet) |
+| `/active-trip/:bookingId` | ✅ 100% (IndexedDB + cached images) |
 
 ---
 
-## 8. Error Handling & Edge Cases
+## 6. Error Handling & Validation
 
-### 8.1 Network Errors
+### 6.1 Client-Side Validation
 
-| Scenario | Behavior |
-|----------|----------|
-| Offline when clicking "Selesaikan Pemesanan" | Button disabled, show "Koneksi internet diperlukan" |
-| Offline on /explore | Page loads from cache, search disabled, offline badge shown |
-| Offline on /active-trip | 100% functional, data from IndexedDB |
+**Location:** `utils/validation.js`
 
-### 8.2 Data Validation
+**Rules:**
 
-**Client-side validation (before checkout):**
-- Min 1, max 3 destinations selected
-- Guide selected
-- Payment option selected
-- Total cost calculated correctly
+```javascript
+// Destination selection
+- Minimum: 1
+- Maximum: 3
+- Each ID must exist in destinations.json
 
-**Error responses (all client-side alerts):**
+// Guide selection
+- Required: Yes
+- Type: String (guide ID)
+- Must exist in guides.json
+
+// Car selection
+- Required: No
+- Type: String (car ID) or null
+- If provided, must exist in carRentals.json
+
+// Payment option
+- Required: Yes
+- Type: String
+- Must be: 'DP_50' or 'FULL'
+
+// Booking ID
+- Format: BATOUR-[6 alphanumeric chars]
+- Example: BATOUR-XY7Z9K
+- Uniqueness: Enforced by IndexedDB primary key
+```
+
+### 6.2 Error Responses
+
+**Standard Error Shape:**
+
+```json
+{
+  "error": true,
+  "message": "Human-readable Indonesian message",
+  "code": "ERROR_CODE",
+  "field": "fieldName"
+}
+```
+
+**Examples:**
+
 ```json
 {
   "error": true,
   "message": "Pilih minimal 1 destinasi",
-  "code": "VALIDATION_ERROR"
+  "code": "VALIDATION_ERROR",
+  "field": "selectedDestinations"
 }
 ```
 
-### 8.3 Edge Cases
+```json
+{
+  "error": true,
+  "message": "Koneksi internet diperlukan untuk melanjutkan",
+  "code": "OFFLINE_ERROR"
+}
+```
 
-| Case | Handling |
-|------|----------|
-| User deletes selected destination while building | Trip resets destination list, user prompted |
-| User clicks back button multiple times | React Router maintains history, no data loss |
-| User refreshes on /booking-details | Session state recovered from IndexedDB |
-| User opens /active-trip/:bookingId that doesn't exist | Error screen with "Hubungi Kami" link |
-| IndexedDB quota exceeded | Show error, suggest clearing cache |
-
----
-
-## 9. Data Freshness & Caching Policy
-
-| Data | Source | Cache Strategy | TTL |
-|------|--------|-----------------|-----|
-| Destinations | `destinations.json` | Bundle + Service Worker | App lifetime |
-| Guides | `guides.json` | Bundle + Service Worker | App lifetime |
-| Car Rentals | `carRentals.json` | Bundle + Service Worker | App lifetime |
-| Transit Matrix | `transitMatrix.json` | Bundle + Service Worker | App lifetime |
-| Bookings | IndexedDB | Local storage | Until explicit delete |
-| Session State | IndexedDB | Auto-persist on change | Until tab close (if not persisted) |
-
-**Notes:**
-- No HTTP requests (except initial app bundle)
-- All data bundled at build time
-- Static data updates require app rebuild + Vercel redeploy
-- User bookings persist across sessions via IndexedDB
+```json
+{
+  "error": true,
+  "message": "Trip tidak ditemukan",
+  "code": "NOT_FOUND",
+  "field": "bookingId"
+}
+```
 
 ---
 
-## 10. Validation Rules
+## 7. Data Freshness & Cache Strategy
 
-### 10.1 Destination Selection
+| Data | Source | Cache Strategy | TTL | Invalidation |
+|------|--------|-----------------|-----|--------------|
+| Destinations | `destinations.json` (bundled) | Service Worker precache | App lifetime | Rebuild + redeploy |
+| Guides | `guides.json` (bundled) | Service Worker precache | App lifetime | Rebuild + redeploy |
+| Car Rentals | `carRentals.json` (bundled) | Service Worker precache | App lifetime | Rebuild + redeploy |
+| Transit Matrix | `transitMatrix.json` (bundled) | Service Worker precache | App lifetime | Rebuild + redeploy |
+| Bookings | IndexedDB | Local storage | Permanent | Manual delete or trip completion |
+| Session State | IndexedDB | Local storage | Permanent | Manual clear or 30-day idle |
 
-- **Min:** 1
-- **Max:** 3
-- **Type:** Array of destination IDs
-- **Validation:** Each ID must exist in `destinations.json`
+**Critical Notes:**
+- **Zero HTTP requests** after initial app bundle load
+- All data bundled at **build time**
+- Static data updates require **app rebuild + Vercel redeploy**
+- User bookings **persist indefinitely** until explicitly deleted
 
-### 10.2 Guide Selection
+---
 
-- **Required:** Yes
-- **Type:** String (guide ID)
-- **Validation:** ID must exist in `guides.json`
+## 8. Performance Targets
 
-### 10.3 Car Selection
+### Core Web Vitals
 
-- **Required:** No (null allowed = no car)
-- **Type:** String (car ID) or null
-- **Validation:** If provided, must exist in `carRentals.json`
+| Metric | Target | Measurement Method |
+|--------|--------|-------------------|
+| FCP (First Contentful Paint) | < 1.5s | Lighthouse, Vercel Analytics |
+| LCP (Largest Contentful Paint) | < 2.5s | Lighthouse, Vercel Analytics |
+| TTFB (Time to First Byte) | < 0.5s | Vercel edge cache |
+| CLS (Cumulative Layout Shift) | < 0.1 | Lighthouse |
+| TBT (Total Blocking Time) | < 200ms | Lighthouse |
 
-### 10.4 Payment Option
+### Bundle Size
 
-- **Required:** Yes
-- **Type:** String, one of `DP_50`, `FULL`
-- **Validation:** Must be one of allowed values
+```
+React 18: ~78KB (gzipped)
+React Router: ~15KB (gzipped)
+Zustand: ~3KB (gzipped)
+Tailwind CSS: ~50KB (gzipped)
+Other (utils, components): ~30KB (gzipped)
+---
+Total: < 300KB (gzipped)
+```
 
-### 10.5 Booking ID
+---
 
-- **Format:** `BATOUR-` + 6-char alphanumeric (e.g., `BATOUR-XY7Z9K`)
-- **Generation:** Client-side UUID shortener
-- **Uniqueness:** Enforced by IndexedDB primary key
+## 9. Accessibility (WCAG 2.1 Level AA)
+
+### Checklist
+
+- [ ] All interactive elements keyboard-navigable (Tab key)
+- [ ] Focus indicators visible (2px outline, contrast ≥ 3:1)
+- [ ] Color contrast ≥ 4.5:1 for all text
+- [ ] Alt text for all images (`alt` attribute or `aria-label`)
+- [ ] ARIA labels for icon-only buttons (`aria-label` attribute)
+- [ ] Form labels properly associated (label + input `id`)
+- [ ] Screen reader tested (NVDA on Windows, VoiceOver on macOS/iOS)
+- [ ] No keyboard traps (focus always movable)
+- [ ] Semantic HTML (buttons, links, landmarks)
+
+---
+
+## 10. Deployment & Build Configuration
+
+### Environment Variables (Vercel)
+
+```
+VITE_API_BASE_URL=https://batour.vercel.app (for analytics, future APIs)
+VITE_GA_ID=UA-XXXXXXXXX-X (Google Analytics, optional)
+```
+
+### Build Output
+
+```
+dist/
+├── index.html
+├── assets/
+│   ├── app.[HASH].js (React app)
+│   ├── app.[HASH].css (Tailwind)
+│   ├── destinations.[HASH].json
+│   └── images/
+│       ├── destinations/
+│       ├── guides/
+│       └── cars/
+└── manifest.json (PWA manifest)
+```
 
 ---
 
 **Document Control:**
-- **Created:** May 13, 2026
-- **Last Updated:** May 13, 2026
-- **Format:** Markdown + JSON examples
+- **Created:** May 14, 2026 (VibeCODE Generation)
+- **Revision:** 1.0
 - **Distribution:** Engineering, QA teams

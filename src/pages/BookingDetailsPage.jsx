@@ -151,7 +151,6 @@ export default function BookingDetailsPage() {
 						</Button>
 						<Button
 							className="flex-1 py-4"
-							disabled={!selectedPaymentOption}
 							onClick={() => navigate("/payment-options")}>
 							Continue
 						</Button>

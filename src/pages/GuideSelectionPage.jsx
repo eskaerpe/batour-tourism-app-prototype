@@ -33,19 +33,19 @@ export default function GuideSelectionPage() {
 				/>
 				<p className="mt-2 text-sm text-slate-500">Pilih satu guide lokal yang paling cocok dengan gaya perjalananmu.</p>
 
-				<div className="mt-5 space-y-4">
+				<div className="mt-5 space-y-4 pb-8">
 					{guides.map((guide) => {
 						const isSelected = selectedGuide === guide.id;
 						return (
 							<button
 								key={guide.id}
 								onClick={() => setGuide(guide.id)}
-								className={`w-full rounded-[28px] p-4 text-left transition ${isSelected ? "border-2 border-[#ec5b13] bg-orange-50" : "border border-gray-200 bg-white"}`}>
-								<div className="flex gap-3">
+								className={`w-full overflow-hidden rounded-[28px] p-4 text-left transition ${isSelected ? "border-2 border-[#ec5b13] bg-orange-50 shadow-[0_12px_30px_rgba(236,91,19,0.08)]" : "border border-slate-200 bg-white shadow-sm"}`}>
+								<div className="flex gap-4">
 									<img
 										src={guide.photo}
 										alt={guide.photoAlt}
-										className="h-20 w-20 shrink-0 rounded-2xl object-cover"
+										className="h-24 w-24 shrink-0 rounded-2xl object-cover"
 									/>
 									<div className="min-w-0 flex-1">
 										<div className="flex items-start justify-between gap-2">
@@ -74,8 +74,8 @@ export default function GuideSelectionPage() {
 												</div>
 											) : null}
 										</div>
-										<p className="mt-2 line-clamp-2 text-sm leading-6 text-slate-600">{guide.bio}</p>
-										<div className="mt-3 flex gap-2 overflow-x-auto whitespace-nowrap pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+										<p className="mt-3 text-sm leading-7 text-slate-600">{guide.bio}</p>
+										<div className="mt-4 flex gap-2 overflow-x-auto whitespace-nowrap pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
 											{guide.languages.map((language) => (
 												<Badge key={language}>{language}</Badge>
 											))}
